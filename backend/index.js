@@ -12,6 +12,11 @@ mongoose
     .then(() => console.log("Connected to MongoDB"))
     .catch((error) => console.error("Error trying to connect:", error));
 
+// middleware
+app.use(express.json());
+app.use(helmet());
+app.use(morgan("common"));
+
 app.listen(8800, () => {
     console.log("Backend server is running!!!");
 });
