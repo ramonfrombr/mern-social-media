@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const usersRoute = require("./routes/users");
 
 dotenv.config();
 
@@ -16,6 +17,10 @@ mongoose
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
+
+// routes
+app.use("/api/users", usersRoute)
+
 
 app.get("/", (request, response) => {
     response.send("Welcome to my website");
