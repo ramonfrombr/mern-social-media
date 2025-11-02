@@ -13,14 +13,31 @@ router.post("/register", async (request, response) => {
         const newUser = new User({
             username: request.body.username,
             email: request.body.email,
-            password: hashedPassword
+            password: hashedPassword,
         });
 
         // Save user and respond
         const user = await newUser.save();
         response.status(200).json(user);
     } catch (error) {
-        console.log(error);
+        response.status(500).json(error);
+    }
+});
+
+router.post("/login", async (request, response) => {
+    try {
+        const user = await User.findOne({ email: request.body.email });
+        !user && response.status(404).send("User not found");
+
+        const validPassword = await bcrypt.compare(
+            request.body.password,
+            user.password
+        );
+        !validPassword && response.status(400).send("Incorrect password");
+
+        response.status(200).json(user);
+    } catch (error) {
+        response.status(500).json(error);
     }
 });
 
